@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Signup | Food App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* Floating Food Icons */
+    .background-food {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .background-food img {
+      position: absolute;
+      width: 70px;
+      opacity: 0.25;
+      animation: float 25s linear infinite;
+    }
+
+    .background-food img:nth-child(1) { top: 10%; left: 10%; animation-duration: 20s; }
+    .background-food img:nth-child(2) { top: 30%; left: 80%; animation-duration: 22s; }
+    .background-food img:nth-child(3) { top: 60%; left: 50%; animation-duration: 26s; }
+    .background-food img:nth-child(4) { top: 80%; left: 20%; animation-duration: 24s; }
+    .background-food img:nth-child(5) { top: 50%; left: 10%; animation-duration: 30s; }
+
+    @keyframes float {
+      0%   { transform: translateY(0px) rotate(0deg); }
+      50%  { transform: translateY(-30px) rotate(10deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    /* Signup Card */
+    .signup-box {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .signup-box h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #ff6f61;
+    }
+
+    .signup-btn {
+      width: 100%;
+      padding: 12px;
+      background: #ff6f61;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .signup-btn:hover {
+      background: #e65c50;
+    }
+
+    .bottom-text {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .bottom-text a {
+      color: #ff6f61;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .bottom-text a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .signup-box {
+        padding: 30px 25px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .signup-box {
+        padding: 25px 20px;
+      }
+
+      .background-food img {
+        width: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating background food -->
+  <div class="background-food">
+    <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Pizza">
+    <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Burger">
+    <img src="https://cdn-icons-png.flaticon.com/512/1046/1046750.png" alt="Sushi">
+    <img src="https://cdn-icons-png.flaticon.com/512/877/877951.png" alt="Noodles">
+    <img src="https://cdn-icons-png.flaticon.com/512/135/135620.png" alt="Donut">
+  </div>
+
+  <!-- Signup Container -->
+  <div class="container">
+    <div class="signup-box">
+      <h2>Admin Signup</h2>
+      <form action="/signup" method="POST">
+        <div class="form-group">
+          <label for="adminName">Account Name</label>
+          <input type="text" id="adminName" name="adminName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" name="adminPassword" required>
+        </div>
+
+        <button type="submit" class="signup-btn">Create Admin Account</button>
+
+        <div class="bottom-text">
+          Already have an account? <a href="/login">Login here</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

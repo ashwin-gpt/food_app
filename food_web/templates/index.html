@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+  <title>Restaurant Landing Page</title>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-color: #ffffff;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 0;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .logo-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      color: white;
+      text-decoration: none;
+      position: relative;
+      font-weight: 500;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #00d4ff;
+      transition: width 0.3s ease;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      height: 3px;
+      width: 25px;
+      background: white;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
+
+    /* Hero Section with Carousel */
+    .hero-section {
+      margin-top: 80px;
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+    }
+
+    .owl-carousel .item {
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+    .owl-carousel .item .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(15, 23, 42, 0.6));
+      z-index: 1;
+    }
+
+    .owl-carousel .item .content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      max-width: 800px;
+      padding: 2rem;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Live Offer Badge */
+    .live-offer-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(45deg, #ff4757, #ff3838);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      z-index: 3;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+      }
+      50% {
+        box-shadow: 0 4px 25px rgba(255, 71, 87, 0.8);
+      }
+      100% {
+        box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+      }
+    }
+
+    /* Offer CTA Button */
+    .offer-cta {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .offer-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+    }
+
+    /* Menu Cards Container */
+    .menu-cards-container {
+      position: relative;
+      padding: 2rem 0;
+      background: #f8fafc;
+    }
+
+    .corner-menu-cards {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      padding: 0 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .corner-menu-card {
+      width: 200px;
+      height: 200px;
+      background: white;
+      border: 2px solid #0f172a;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .corner-menu-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .menu-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 0.5rem;
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+
+    .menu-card h3 {
+      color: #0f172a;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* QR Code Section */
+    .qr-section {
+      padding: 2rem;
+      text-align: center;
+      background: white;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .button-container button {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .button-container button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-container button::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      transition: width 0.4s ease, height 0.4s ease;
+      z-index: 0;
+    }
+
+    .button-container button:hover::after {
+      width: 300%;
+      height: 300%;
+    }
+
+    .button-container button span {
+      position: relative;
+      z-index: 1;
+    }
+
+    #qr-code-container {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1rem;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Social Media Section */
+    .social-media-section {
+      background: #0f172a;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .social-media-section h2 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .social-media-section p {
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    .social-icons {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .social-icons a {
+      color: #00d4ff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 2px solid #00d4ff;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      background: #00d4ff;
+      color: #0f172a;
+      transform: translateY(-2px);
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      color: white;
+      display: none;
+    }
+
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 3px solid #fff;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: absolute;
+        top: 65px;
+        left: 0;
+        background-color: rgba(15, 23, 42, 0.95);
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        display: none;
+        padding: 1rem 0;
+      }
+
+      .nav-menu.active {
+        display: flex;
+      }
+
+      .hero-section {
+  height: auto;
+}
+.owl-carousel .item {
+  min-height: 350px;
+}
+
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .live-offer-badge {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+      }
+
+      .corner-menu-cards {
+        gap: 1rem;
+        padding: 0 1rem;
+      }
+
+      .corner-menu-card {
+        width: 150px;
+        height: 150px;
+      }
+
+      .menu-card img {
+        width: 70px;
+        height: 70px;
+      }
+
+      .menu-card h3 {
+        font-size: 0.9rem;
+      }
+
+      .social-icons {
+        gap: 1rem;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-section {
+        height: 350px;
+        margin-top: 60px;
+      }
+
+      .owl-carousel .item {
+        height: 350px;
+      }
+
+      .hero-title {
+        font-size: 1.5rem;
+      }
+
+      .corner-menu-card {
+        width: 130px;
+        height: 130px;
+      }
+
+      .menu-card img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <img src="static/pic_logo.jpeg" class="logo-image" alt="Logo" />
+      <div class="menu-toggle" id="menu-toggle">
+        <span></span><span></span><span></span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="home" class="hero-section">
+  <div class="loading-spinner" id="loading-spinner">
+    <div class="spinner"></div>
+  </div>
+  <div class="owl-carousel owl-theme">
+    <!-- Dynamic content will be injected here via JavaScript -->
+  </div>
+</section>
+
+
+  </section>
+
+  <!-- Menu Cards Section -->
+  <section class="menu-cards-container" id="services">
+    <div class="corner-menu-cards">
+      <div class="corner-menu-card menu-card" onclick="openMenu()">
+        <img src="https://sukhis.com/app/uploads/2022/04/image3-4.jpg" alt="Menu">
+        <h3>Menu</h3>
+    </div>
+      
+      <div class="corner-menu-card menu-card" onclick="openSpecialMenu()">
+        <img src="https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg" alt="Menu">
+        <h3>Special Menu</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- QR Code Section -->
+  <section class="qr-section">
+    <div class="button-container">
+      <button onclick="toggleQRCode()"><span>Tap here and Scan QR Code to Share</span></button>
+    </div>
+    <div id="qr-code-container">
+      <div id="qrcode"></div>
+    </div>
+  </section>
+
+  <!-- Social Media Section -->
+  <section class="social-media-section" id="contact">
+    <h2>Contact Us</h2>
+    <p>Stay updated with our latest offerings and events!</p>
+    <div class="social-icons">
+      <a href="#" target="_blank">
+        <i class="fab fa-facebook"></i> Facebook
+      </a>
+      <a href="#" target="_blank">
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+      <a href="#" target="_blank">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    // Default carousel slides configuration
+    const defaultSlides = [
+      {
+        id: 'slide1',
+        position: 1,
+        type: 'default',
+        backgroundImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80',
+        title: 'Welcome to Our Restaurant',
+        subtitle: 'Experience the finest dining with our special dishes',
+        isOffer: false
+      },
+      {
+        id: 'slide2',
+        position: 2,
+        type: 'default',
+        backgroundImage: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80',
+        title: 'Special Offers',
+        subtitle: 'Don\'t miss out on our amazing deals!',
+        isOffer: false
+      },
+      {
+        id: 'slide3',
+        position: 3,
+        type: 'default',
+        backgroundImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+        title: 'Fresh Ingredients',
+        subtitle: 'Made with the finest and freshest ingredients',
+        isOffer: false
+      }
+    ];
+
+    // Current slides state
+    let currentSlides = [...defaultSlides];
+
+  
+
+    // Function to update carousel with live offers
+    function updateCarouselWithOffers(offers) {
+  const carousel = $(".owl-carousel");
+  carousel.trigger('destroy.owl.carousel');
+  carousel.empty();
+
+  if (offers.length > 0) {
+    offers.forEach(offer => {
+      carousel.append(`
+        <div class="item" style="background-image: url('${offer.imageUrl}'); background-size: cover; background-position: center;">
+          <div class="overlay"></div>
+          <div class="content">
+            <h1>${offer.title}</h1>
+            <p>${offer.subtitle}</p>
+            <span class="badge">${offer.badge}</span>
+            <a href="${offer.ctaLink}" class="cta-button">${offer.ctaText}</a>
+          </div>
+        </div>
+      `);
+    });
+  } else {
+    const defaultBanners = [
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5',
+      'https://images.unsplash.com/photo-1414235077428-338989a2e8c0',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'
+    ];
+
+    defaultBanners.forEach(src => {
+      carousel.append(`
+        <div class="item" style="background-image: url('${src}'); background-size: cover; background-position: center;">
+          <div class="overlay"></div>
+          <div class="content">
+            <h1>Welcome!</h1>
+            <p>Enjoy delicious food</p>
+          </div>
+        </div>
+      `);
+    });
+  }
+
+  initializeCarousel(); // ✅ Only call this here
+}
+
+
+    // Function to render carousel with current slides
+    function renderCarousel() {
+      const carousel = document.getElementById('hero-carousel');
+      
+      // Clear existing slides
+      carousel.innerHTML = '';
+
+      // Add slides
+      currentSlides.forEach(slide => {
+        const slideHtml = createSlideHTML(slide);
+        carousel.innerHTML += slideHtml;
+      });
+
+      // Reinitialize Owl Carousel
+      initializeCarousel();
+    }
+
+    // Function to create slide HTML
+    function createSlideHTML(slide) {
+      const offerBadge = slide.isOffer ? 
+        `<div class="live-offer-badge">${slide.offerBadge}</div>` : '';
+      
+      const offerCTA = slide.isOffer ? 
+        `<a href="${slide.ctaLink}" class="offer-cta">${slide.ctaText}</a>` : '';
+
+      return `
+        <div class="item" style="background-image: url('${slide.backgroundImage}');">
+          <div class="overlay"></div>
+          ${offerBadge}
+          <div class="content">
+            <h1 class="hero-title">${slide.title}</h1>
+            <p class="hero-subtitle">${slide.subtitle}</p>
+            ${offerCTA}
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadLiveOffers() {
+  try {
+    const response = await fetch('/api/live-offers?shop=default');
+    if (!response.ok) throw new Error('Fetch failed');
+
+    const offers = await response.json();
+    updateCarouselWithOffers(offers);
+  } catch (error) {
+    console.error('Error loading live offers:', error);
+    updateCarouselWithOffers([]); // fallback
+  }
+}
+
+
+    // Function to initialize Owl Carousel
+    function initializeCarousel() {
+      // Destroy existing carousel if it exists
+      const $carousel = $(".owl-carousel");
+      if ($carousel.hasClass('owl-loaded')) {
+        $carousel.trigger('destroy.owl.carousel');
+        $carousel.removeClass('owl-loaded');
+        $carousel.find('.owl-stage-outer').children().unwrap();
+      }
+
+      // Initialize new carousel
+      $carousel.owlCarousel({
+  loop: true,
+  margin: 0,
+  nav: true,
+  navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+  items: 1,
+  autoplay: true,
+  autoplayTimeout: 3000, // ⏱️ Slide every 3 seconds (adjustable)
+  smartSpeed: 500,       // 🚀 Slide transition speed (0.5s)
+  autoplayHoverPause: true,
+  animateOut: 'fadeOut',
+  responsive: {
+    0: { items: 1 },
+    600: { items: 1 },
+    1000: { items: 1 }
+  }
+});
+    }
+
+      
+
+      $(document).ready(function () {
+  loadLiveOffers(); // 🟢 This loads your uploaded offers
+  $('#menu-toggle').click(function () {
+    $('#nav-menu').toggleClass('active');
+  });
+});
+
+
+    // QR Code functionality
+    let qrGenerated = false;
+    function toggleQRCode() {
+      const qrContainer = document.getElementById("qr-code-container");
+      const qrDiv = document.getElementById("qrcode");
+
+      if (qrContainer.style.display === "none" || qrContainer.style.display === "") {
+        qrContainer.style.display = "flex";
+
+        if (!qrGenerated) {
+          const currentUrl = window.location.href;
+          new QRCode(qrDiv, {
+            text: currentUrl,
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+          qrGenerated = true;
+        }
+      } else {
+        qrContainer.style.display = "none";
+      }
+    }
+
+    // Menu functions
+    function openMenu() {
+      window.open('https://sites.google.com/view/booster-chaya/menu', '_blank');
+    }
+
+    function openSpecialMenu() {
+      alert('Special menu coming soon!');
+    }
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Fade in animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Simulated API for demonstration (Remove this in production)
+    // This simulates your backend API response
+    window.simulateOfferAPI = function() {
+      // Example API response format
+      const sampleOffers = [
+        {
+          id: 'offer1',
+          position: 2, // This will replace the second slide
+          imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80',
+          title: '🔥 Flash Sale!',
+          subtitle: 'Get 50% off on all pizzas - Valid until midnight!',
+          badge: '50% OFF',
+          ctaText: 'Order Now',
+          ctaLink: '#order',
+          validUntil: '2024-12-31',
+          discount: '50%'
+        }
+      ];
+      
+      // Replace the fetch call temporarily for demo
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(sampleOffers)
+      });
+    };
+  </script>
+</body>
+</html>

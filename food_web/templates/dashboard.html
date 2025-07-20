@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Hub Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body, html { height:100%; font-family:'Poppins', sans-serif; background:#f4f6f8; }
+    .sidebar {
+      position: fixed; left:0; top:0; width:250px; height:100%;
+      background:#2f3e46; color:#fff; padding-top:40px;
+    }
+    .sidebar h2 { text-align:center; margin-bottom:30px; font-weight:600; font-size:1.5rem; }
+    .sidebar ul { list-style:none; }
+    .sidebar li {
+      padding:15px 25px; cursor:pointer; font-size:1rem;
+      transition:background .2s;
+    }
+    .sidebar li:hover, .sidebar li.active { background:#354f52; }
+    .main {
+      margin-left:250px; padding:30px; transition: margin .3s;
+    }
+    .header {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:30px;
+    }
+    .header h1 { font-size:1.8rem; color:#2f3e46; }
+    .content-card {
+      background:#fff; padding:20px; border-radius:8px; margin-bottom:20px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    }
+    .content-card h2 {
+      margin-bottom:15px; color:#2f3e46; font-size:1.25rem;
+    }
+    .content-card button {
+      padding:10px 15px; background:#2f3e46; color:#fff; border:none;
+      border-radius:5px; cursor:pointer; font-size:0.95rem;
+    }
+    input, select {
+      width:100%; padding:10px; margin:8px 0 16px;
+      border:1px solid #ccc; border-radius:5px;
+    }
+    .alert {
+      padding:10px; margin:10px 0; border-radius:5px;
+      background:#d4edda; color:#155724; border:1px solid #c3e6cb;
+    }
+    .alert.error {
+      background:#f8d7da; color:#721c24; border:1px solid #f5c6cb;
+    }
+    @media(max-width:768px) {
+      .sidebar { width:200px; }
+      .main { margin-left:200px; padding:20px; }
+    }
+    @media(max-width:576px) {
+      .sidebar { position: relative; width:100%; height:auto; }
+      .main { margin-left:0; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <h2>Food Hub</h2>
+  <ul>
+    <li id="menu-contact" class="active">Update Contact Info</li>
+    <li id="menu-offer">Update Offer</li>
+    <li id="menu-public">View Public Page</li>
+  </ul>
+</nav>
+
+<section class="main">
+  <div class="header">
+    <h1>Dashboard - {{ shop or 'Default' }}</h1>
+  </div>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alerts">
+        {% for message in messages %}
+          <div class="alert">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div id="content">
+    <!-- Default content - Contact Info -->
+    <div class="content-card">
+      <h2>Update Contact Info</h2>
+      <form method="POST" action="{{ url_for('views.dashboard_post', shop_name=shop) }}">
+        <label for="facebook">Facebook:</label>
+        <input type="url" name="facebook" id="facebook" value="{{ links.facebook if links else '' }}" placeholder="https://facebook.com/yourpage">
+
+        <label for="instagram">Instagram:</label>
+        <input type="url" name="instagram" id="instagram" value="{{ links.instagram if links else '' }}" placeholder="https://instagram.com/yourpage">
+
+        <label for="whatsapp">WhatsApp:</label>
+        <input type="url" name="whatsapp" id="whatsapp" value="{{ links.whatsapp if links else '' }}" placeholder="https://wa.me/your-number">
+
+        <button type="submit">Update Links</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Pre-rendered variables from Flask -->
+<script>
+  const shopName = "{{ shop or 'default' }}";
+  const dashboardUrl = "{{ url_for('views.dashboard', shop_name=shop) }}";
+  const fb = "{{ links.facebook if links else '' }}";
+  const ig = "{{ links.instagram if links else '' }}";
+  const wa = "{{ links.whatsapp if links else '' }}";
+</script>
+
+<!-- Main JS -->
+<script>
+  const content = document.getElementById('content');
+  const sidebarItems = document.querySelectorAll('.sidebar li');
+
+  function show(html) {
+    content.innerHTML = html;
+  }
+
+  function setActiveMenuItem(clickedItem) {
+    sidebarItems.forEach(item => item.classList.remove('active'));
+    clickedItem.classList.add('active');
+  }
+
+  document.getElementById('menu-contact').onclick = function() {
+    setActiveMenuItem(this);
+    show(`
+      <div class="content-card">
+        <h2>Update Contact Info</h2>
+        <form method="POST" action="{{ url_for('views.dashboard_post', shop_name=shop) }}">
+          <label for="facebook">Facebook:</label>
+          <input type="url" name="facebook" id="facebook" value="${fb}" placeholder="https://facebook.com/yourpage">
+
+          <label for="instagram">Instagram:</label>
+          <input type="url" name="instagram" id="instagram" value="${ig}" placeholder="https://instagram.com/yourpage">
+
+          <label for="whatsapp">WhatsApp:</label>
+          <input type="url" name="whatsapp" id="whatsapp" value="${wa}" placeholder="https://wa.me/your-number">
+
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
+    `);
+  };
+
+  document.getElementById('menu-offer').onclick = function() {
+    setActiveMenuItem(this);
+    show(`
+      <div class="content-card">
+        <h2>Upload New Offer for ${shopName}</h2>
+        <form method="POST" action="{{ url_for('views.dashboard_post', shop_name=shop) }}" enctype="multipart/form-data">
+          <label for="offer_image">Offer Image:</label>
+          <input type="file" name="offer_image" id="offer_image" accept="image/*" required>
+
+          <label for="start_time">Start Time:</label>
+          <input type="time" name="start_time" id="start_time" required>
+
+          <label for="end_time">End Time:</label>
+          <input type="time" name="end_time" id="end_time" required>
+
+          <button type="submit">Upload Offer</button>
+        </form>
+        
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+          <h3>Current Active Offers</h3>
+          <div id="current-offers">Loading...</div>
+        </div>
+      </div>
+    `);
+    loadCurrentOffers();
+  };
+
+  document.getElementById('menu-public').onclick = function() {
+    setActiveMenuItem(this);
+    show(`
+      <div class="content-card">
+        <h2>Public Page Preview</h2>
+        <p>View your public food hub page as customers see it.</p>
+        <button onclick="window.open('/?shop=${shopName}', '_blank')" style="margin-right: 10px;">
+          Open Public Page
+        </button>
+        <button onclick="copyPublicLink()">
+          Copy Public Link
+        </button>
+        
+        <div style="margin-top: 20px;">
+          <h3>Your Public URL:</h3>
+          <input type="text" value="${window.location.origin}/?shop=${shopName}" readonly style="background: #f8f9fa;">
+        </div>
+      </div>
+    `);
+  };
+
+  function loadCurrentOffers() {
+    fetch(`/api/live-offers?shop=${shopName}`)
+      .then(response => response.json())
+      .then(offers => {
+        const offersContainer = document.getElementById('current-offers');
+        if (offers.length === 0) {
+          offersContainer.innerHTML = '<p>No active offers found.</p>';
+        } else {
+          offersContainer.innerHTML = offers.map(offer => `
+            <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px;">
+              <img src="${offer.imageUrl}" alt="Offer" style="max-width: 100px; height: 60px; object-fit: cover;">
+              <p><strong>Status:</strong> Active</p>
+              <p><strong>Position:</strong> ${offer.position}</p>
+            </div>
+          `).join('');
+        }
+      })
+      .catch(error => {
+        document.getElementById('current-offers').innerHTML = '<p>Error loading offers.</p>';
+        console.error('Error:', error);
+      });
+  }
+
+  function copyPublicLink() {
+    const link = `${window.location.origin}/?shop=${shopName}`;
+    navigator.clipboard.writeText(link).then(() => {
+      alert('Link copied to clipboard!');
+    }).catch(() => {
+      // Fallback for older browsers
+      const input = document.createElement('input');
+      input.value = link;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      alert('Link copied to clipboard!');
+    });
+  }
+</script>
+
+</body>
+</html>
